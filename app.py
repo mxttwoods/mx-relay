@@ -26,7 +26,7 @@ logger.info("PASSWORD %s", PASSWORD)
 logger.info("SMTP: %s", SMTP)
 
 
-@app.route("api/v1/mail/<email>/<subject>/<message>", methods=["GET", "POST"])
+@app.route("/api/v1/mail/<email>/<subject>/<message>", methods=["GET", "POST"])
 def send_mail(email, subject, message):
     if request.method == "POST":
         global USERNAME

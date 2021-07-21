@@ -5,6 +5,8 @@ black==21.7b0
 certifi==2021.5.30
 charset-normalizer==2.0.3
 click==8.0.1
+flask== 2.0.1
+gunicorn==19.9.0
 idna==3.2
 iniconfig==1.1.1
 isort==5.9.2
@@ -22,6 +24,7 @@ pyrsistent==0.18.0
 pytest==6.2.4
 pytest-html==3.1.1
 pytest-metadata==1.11.0
+pyyaml==3.13
 regex==2021.7.6
 requests==2.26.0
 six==1.16.0
