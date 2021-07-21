@@ -46,18 +46,19 @@ def send_mail(email, subject, message):
             message=message, subject=subject, email=email
         )
 
-        logger.info("Sending mail to %s", email)
-        logger.info("Message: %s", content)
-
-        with smtplib.SMTP_SSL(SMTP, PORT, ssl.create_default_context()) as server:
-            server.login(USERNAME, PASSWORD)
-            server.sendmail(USERNAME, email, content)
+        try:
+            with smtplib.SMTP_SSL(SMTP, PORT, ssl.create_default_context()) as server:
+                server.login(USERNAME, PASSWORD)
+                server.sendmail(USERNAME, email, content)
+        except Exception as e:
+            logger.error(e)
+            return jsonify({"status": "error"})
 
         response = "Email sent to {0}, content: {1}".format(email, content)
-        logger.info(jsonify(response))
+        logger.info(jsonify({"response": response}))
         return response, 200
 
     if request.method == "GET":
         response = "Email sent to {0}, content: {1}".format(email, content)
-        logger.info(jsonify(response))
+        logger.info(jsonify({"response": response}))
         return response, 200
