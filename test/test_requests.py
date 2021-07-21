@@ -13,19 +13,20 @@ from jsonschema import Draft6Validator
 
 schema = {
     "$schema": "https://json-schema.org/schema#",
-    "type" : "object",
-    "properties" : {
+    "type": "object",
+    "properties": {
         "email": {
             "type": "object",
             "properties": {
-                "subject": { "type": "string" },
-                "message": { "type": "string" },
-                "to": { "type": "string" }
+                "subject": {"type": "string"},
+                "message": {"type": "string"},
+                "to": {"type": "string"},
             },
-            "required": ["subject", "message", "to"]
+            "required": ["subject", "message", "to"],
         }
-    }
+    },
 }
+
 
 def test_post_email():
     response = requests.post(
@@ -33,7 +34,7 @@ def test_post_email():
         json={"subject": "value", "message": "value", "to": "value"},
     )
 
-    assert response.request.headers['Content-Type']
+    assert response.request.headers["Content-Type"]
     assert response.request.url == "https://localhost/api/v1/mail"
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json"
