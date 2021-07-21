@@ -2,6 +2,15 @@
 
 > a python email relay using gmail smtp
 
+## TODO
+
+- Finish tests to uri scheme
+- Finish `post:` call to email relay - send emails
+- Finish `get:` call to email relay - return emails?
+- Test relay functionality
+- Create API Docs - swagger?
+- FastAPI?
+
 ## Setup
 
 ### Resources
