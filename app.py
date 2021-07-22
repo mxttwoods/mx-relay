@@ -26,6 +26,14 @@ logger.info("PASSWORD %s", PASSWORD)
 logger.info("SMTP: %s", SMTP)
 
 
+@app.route("/api/v1/", methods=["GET", "POST"])
+def index():
+    if request.method == "GET":
+        return jsonify({"message": "GET"})
+    elif request.method == "POST":
+        return jsonify({"message": "POST"})
+
+
 @app.route("/api/v1/mail/<email>/<subject>/<message>", methods=["GET", "POST"])
 def send_mail(email, subject, message):
     if request.method == "POST":
@@ -58,7 +66,11 @@ def send_mail(email, subject, message):
         logger.info(jsonify({"response": response}))
         return response, 200
 
-    if request.method == "GET":
+    elif request.method == "GET":
         response = "Email sent to {0}, content: {1}".format(email, content)
         logger.info(jsonify({"response": response}))
         return response, 200
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
