@@ -1,3 +1,3 @@
 cd ..
-docker build --tag python-mx-relay .
+docker build  --label mxrelay --tag python-mx-relay:latest .
 cd ./scripts
