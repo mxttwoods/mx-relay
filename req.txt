@@ -6,6 +6,7 @@ certifi==2021.5.30
 charset-normalizer==2.0.3
 click==8.0.1
 flask== 2.0.1
+Flask-SQLAlchemy==2.5.1
 gunicorn==19.9.0
 idna==3.2
 iniconfig==1.1.1
@@ -24,7 +25,7 @@ pyrsistent==0.18.0
 pytest==6.2.4
 pytest-html==3.1.1
 pytest-metadata==1.11.0
-pyyaml==3.13
+pyyaml==5.4.1
 regex==2021.7.6
 requests==2.26.0
 six==1.16.0

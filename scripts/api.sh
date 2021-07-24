@@ -1,3 +1,3 @@
 cd ../api
-flask run --host=0.0.0.0
+guvicorn --bind 0.0.0.0:5000 app:app
 cd ../scripts

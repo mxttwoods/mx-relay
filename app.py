@@ -1,10 +1,16 @@
-import csv, smtplib, ssl, configparser, logging, logging.config
-
+import configparser
+import logging.config
+import smtplib
+import ssl
+import os
+import sys
 import yaml
-
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///mail.db"
+db = SQLAlchemy(app)
 
 config = configparser.ConfigParser()
 config.read("conf.ini")
@@ -13,6 +19,7 @@ USERNAME = config.get("settings", "user")
 PASSWORD = config.get("settings", "pass")
 PORT = config.getint("settings", "port")
 SMTP = config.get("settings", "smtp_server")
+CONTEXT = ssl.create_default_context()
 
 with open("log.yaml", "r") as conf:
     logger_config = yaml.safe_load(conf.read())
@@ -22,53 +29,83 @@ logger = logging.getLogger("main")
 
 logger.info("PORT: %s", PORT)
 logger.info("USERNAME: %s", USERNAME)
-logger.info("PASSWORD %s", PASSWORD)
+logger.info("PASSWORD: %s", PASSWORD)
 logger.info("SMTP: %s", SMTP)
 
 
-@app.route("/api/v1/", methods=["GET", "POST"])
+class Email(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    email = db.Column(db.String(100), unique=False, nullable=False)
+    message = db.Column(db.String(200), unique=False, nullable=False)
+    success = db.Column(db.Boolean, nullable=False)
+
+    def __repr__(self):
+        return "<Email(email='%s', message='%s', success='%s')>" % (
+            self.email,
+            self.message,
+            self.success,
+        )
+
+
+db.create_all()
+
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    if request.method == "GET":
-        return jsonify({"message": "GET"})
-    elif request.method == "POST":
-        return jsonify({"message": "POST"})
+    return "Hello World!", 200
 
 
-@app.route("/api/v1/mail/<email>/<subject>/<message>", methods=["GET", "POST"])
-def send_mail(email, subject, message):
+@app.route("/api/v2/mail", methods=["POST"])
+def send_mail_v2():
+    if request.method == "POST":
+        email = request.args.get("email", default=None, type=str)
+        message = request.args.get("message", default=None, type=str)
+        global USERNAME
+        global PASSWORD
+        global PORT
+        global SMTP
+        global CONTEXT
+
+        try:
+            with smtplib.SMTP_SSL(SMTP, PORT, context=CONTEXT) as server:
+                server.login(USERNAME, PASSWORD)
+                server.sendmail(USERNAME, email, message)
+        except Exception as e:
+            response = jsonify({"status": "error", "exception": e})
+            logger.error(response)
+            return response, 500
+
+        db.session.add(Email(email=email, message=message, success=True))
+        db.session.commit()
+
+        response = jsonify({"message": message, "email": email, "status": "success"})
+        logging.info(response)
+        return response, 200
+
+
+@app.route("/api/v1/mail/<email>/<message>", methods=["POST"])
+def send_mail(email, message):
     if request.method == "POST":
         global USERNAME
         global PASSWORD
         global PORT
         global SMTP
-
-        content = """\n
-            Hello, World!
-
-            This is a test message sent from Python.\n
-
-            {email}\n
-            {subject}\n
-            {message}\n
-            """.format(
-            message=message, subject=subject, email=email
-        )
+        global CONTEXT
 
         try:
-            with smtplib.SMTP_SSL(SMTP, PORT, ssl.create_default_context()) as server:
+            with smtplib.SMTP_SSL(SMTP, PORT, context=CONTEXT) as server:
                 server.login(USERNAME, PASSWORD)
-                server.sendmail(USERNAME, email, content)
+                server.sendmail(USERNAME, email, message)
         except Exception as e:
-            logger.error(e)
-            return jsonify({"status": "error"})
+            response = jsonify({"status": "error", "exception": e})
+            logger.error(response)
+            return response, 500
 
-        response = "Email sent to {0}, content: {1}".format(email, content)
-        logger.info(jsonify({"response": response}))
-        return response, 200
+        db.session.add(Email(email=email, message=message, success=True))
+        db.session.commit()
 
-    elif request.method == "GET":
-        response = "Email sent to {0}, content: {1}".format(email, content)
-        logger.info(jsonify({"response": response}))
+        response = jsonify({"message": message, "email": email, "status": "success"})
+        logger.info(response)
         return response, 200
 
 
