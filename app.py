@@ -37,13 +37,12 @@ class Email(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(100), unique=False, nullable=False)
     message = db.Column(db.String(200), unique=False, nullable=False)
-    success = db.Column(db.Boolean, nullable=False)
 
     def __repr__(self):
-        return "<Email(email='%s', message='%s', success='%s')>" % (
+        return "<Email(id='%s', email='%s', message='%s')>" % (
+            self.id
             self.email,
             self.message,
-            self.success,
         )
 
 
@@ -71,14 +70,14 @@ def send_mail_v2():
                 server.login(USERNAME, PASSWORD)
                 server.sendmail(USERNAME, email, message)
         except Exception as e:
-            response = jsonify({"status": "error", "exception": e})
+            response = jsonify({"exception": e})
             logger.error(response)
             return response, 500
 
-        db.session.add(Email(email=email, message=message, success=True))
+        db.session.add(Email(email=email, message=message))
         db.session.commit()
 
-        response = jsonify({"message": message, "email": email, "status": "success"})
+        response = jsonify({"message": message, "email": email})
         logging.info(response)
         return response, 200
 
@@ -97,14 +96,14 @@ def send_mail(email, message):
                 server.login(USERNAME, PASSWORD)
                 server.sendmail(USERNAME, email, message)
         except Exception as e:
-            response = jsonify({"status": "error", "exception": e})
+            response = jsonify({"exception": e})
             logger.error(response)
             return response, 500
 
-        db.session.add(Email(email=email, message=message, success=True))
+        db.session.add(Email(email=email, message=message))
         db.session.commit()
 
-        response = jsonify({"message": message, "email": email, "status": "success"})
+        response = jsonify({"message": message, "email": email})
         logger.info(response)
         return response, 200
 
