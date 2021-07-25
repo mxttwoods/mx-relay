@@ -8,6 +8,8 @@ def test_post_email():
 
     response = requests.post(url)
 
+    print(response.text)
+
     assert response.request.url == url
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "application/json"
