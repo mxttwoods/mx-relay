@@ -4,13 +4,9 @@
 
 ## Setup
 
-### Resources
-
-- <https://realpython.com/python-send-email/>
-
 ### Configuration
 
-example `api/conf.ini`
+example `conf.ini`
 
 ```ini
 [settings]
