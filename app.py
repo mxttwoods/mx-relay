@@ -40,7 +40,7 @@ class Email(db.Model):
 
     def __repr__(self):
         return "<Email(id='%s', email='%s', message='%s')>" % (
-            self.id
+            self.id,
             self.email,
             self.message,
         )
