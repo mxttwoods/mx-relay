@@ -13,4 +13,3 @@ def test_post_email():
     assert response.headers["Content-Type"] == "application/json"
     assert response.json()["email"] == email
     assert response.json()["message"] == message
-    assert response.json()["status"] == "success"
