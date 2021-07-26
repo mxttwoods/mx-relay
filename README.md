@@ -75,9 +75,9 @@ make docker-clean
 
 The REST API to the mx-relay is described below.
 
-## POST an Email (v2)
+### POST an Email (v2)
 
-### Request
+#### Request
 
 `POST /api/v2/mail`
 
@@ -85,7 +85,7 @@ The REST API to the mx-relay is described below.
 curl --location --request POST 'http://localhost:5000/api/v2/mail?email=mattwoods9170@gmail.com&message=hello'
 ```
 
-### Response
+#### Response
 
 ```console
 HTTP/1.0 200 OK
@@ -97,9 +97,9 @@ Date: Mon, 26 Jul 2021 00:57:54 GMT
 [{"message": "hello", "email": "mattwoods9170@gmail.com"}]
 ```
 
-## POST an Email (v1)
+### POST an Email (v1)
 
-### Request
+#### Request
 
 `POST /api/v1/mail/<email>/<message>/`
 
@@ -107,7 +107,7 @@ Date: Mon, 26 Jul 2021 00:57:54 GMT
 curl --location --request POST 'http://localhost:5000/api/v1/mail/mattwoods9170@gmail.com/hello'
 ```
 
-### Response
+#### Response
 
 ```console
 HTTP/1.0 200 OK
@@ -119,9 +119,9 @@ Date: Mon, 26 Jul 2021 00:57:54 GMT
 [{"message": "hello", "email": "mattwoods9170@gmail.com"}]
 ```
 
-## Hello World
+### Hello World
 
-### Request
+#### Request
 
 `GET /api/`
 
@@ -129,7 +129,7 @@ Date: Mon, 26 Jul 2021 00:57:54 GMT
 curl -i 'http://localhost:5000/api'
 ```
 
-### Response
+#### Response
 
 ```console
 HTTP/1.0 200 OK
