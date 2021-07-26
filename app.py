@@ -14,11 +14,11 @@ db = SQLAlchemy(app)
 config = configparser.ConfigParser()
 config.read("conf.ini")
 
-USERNAME = config.get("settings", "user")
-PASSWORD = config.get("settings", "pass")
-PORT = config.getint("settings", "port")
-SMTP = config.get("settings", "smtp_server")
-CONTEXT = ssl.create_default_context()
+USERNAME: str = config.get("settings", "user")
+PASSWORD: str = config.get("settings", "pass")
+PORT: int = config.getint("settings", "port")
+SMTP: str = config.get("settings", "smtp_server")
+CONTEXT: ssl.SSLContext = ssl.create_default_context()
 
 with open("log.yaml", "r") as conf:
     logger_config = yaml.safe_load(conf.read())
@@ -41,7 +41,7 @@ class Email(db.Model):
     email = db.Column(db.String(100), unique=False, nullable=False)
     message = db.Column(db.String(200), unique=False, nullable=False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "<Email(id='%s', email='%s', message='%s')>" % (
             self.id,
             self.email,
