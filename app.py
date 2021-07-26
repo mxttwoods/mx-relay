@@ -53,9 +53,9 @@ db.create_all()
 logger.info("Database created")
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/api", methods=["GET", "POST"])
 def index():
-    logger.debug(request.text)
+    logger.debug(request)
     logger.info("Hello World!")
     return "Hello World!", 200
 
@@ -63,7 +63,7 @@ def index():
 @app.route("/api/v2/mail", methods=["POST"])
 def send_mail_v2():
     if request.method == "POST":
-        logger.debug(request.text)
+        logger.debug(request)
         email = request.args.get("email", default=None, type=str)
         message = request.args.get("message", default=None, type=str)
         global USERNAME
@@ -97,7 +97,7 @@ def send_mail_v2():
 @app.route("/api/v1/mail/<email>/<message>", methods=["POST"])
 def send_mail(email, message):
     if request.method == "POST":
-        logger.debug(request.text)
+        logger.debug(request)
         global USERNAME
         global PASSWORD
         global PORT

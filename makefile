@@ -27,4 +27,4 @@ venv:
 	python3 -m venv venv
 	# source venv/bin/activate # not working on macos
 quick-test:
-	curl -i --location --request POST 'http://localhost:5000/api/v2/mail?email=mattwoods9170@gmail.com&message=hello'
+	curl -i 'http://localhost:5000/api'
