@@ -1,4 +1,4 @@
-# Python MX Relay
+# MX Relay
 
 > a python email relay using gmail smtp
 
