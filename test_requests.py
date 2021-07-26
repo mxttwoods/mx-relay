@@ -4,7 +4,7 @@ import requests
 def test_post_email():
     email = "mattwoods9170@gmail.com"
     message = "hello"
-    url = f"http://localhost:5000/api/v2/mail?email={email}&message={message}"
+    url: str = f"http://localhost:5000/api/v2/mail?email={email}&message={message}"
 
     response = requests.post(url)
 
@@ -15,3 +15,5 @@ def test_post_email():
     assert response.headers["Content-Type"] == "application/json"
     assert response.json()["email"] == email
     assert response.json()["message"] == message
+
+# test_post_email() # if not using pytest to run tests - comment out

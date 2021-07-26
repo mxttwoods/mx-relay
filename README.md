@@ -10,10 +10,10 @@ example `conf.ini`
 
 ```ini
 [settings]
-user=example@gmail.com
-pass=imadummypassword
-port=465
-smtp_server=smtp.gmail.com
+user = example@gmail.com
+pass = imadummypassword
+port = 465
+smtp_server = smtp.gmail.com
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ import requests
 
 url = "http://localhost:5000/api/v2/mail?email=mattwoods9170@gmail.com&message=hello"
 
-payload={}
+payload = {}
 headers = {}
 
 response = requests.request("POST", url, headers=headers, data=payload)
@@ -51,14 +51,14 @@ print(response.text)
 
 ```javascript
 var requestOptions = {
-  method: 'POST',
-  redirect: 'follow'
+    method: 'POST',
+    redirect: 'follow'
 }
 
 fetch('http://localhost:5000/api/v2/mail?email=mattwoods9170@gmail.com&message=hello', requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.log('error', error))
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log('error', error))
 ```
 
 ```javascript
@@ -66,29 +66,29 @@ var http = require('follow-redirects').http
 var fs = require('fs')
 
 var options = {
-  method: 'POST',
-  hostname: 'localhost',
-  port: 5000,
-  path: '/api/v2/mail?email=mattwoods9170@gmail.com&message=hello',
-  headers: {},
-  maxRedirects: 20
+    method: 'POST',
+    hostname: 'localhost',
+    port: 5000,
+    path: '/api/v2/mail?email=mattwoods9170@gmail.com&message=hello',
+    headers: {},
+    maxRedirects: 20
 }
 
 var req = http.request(options, function (res) {
-  var chunks = []
+    var chunks = []
 
-  res.on('data', function (chunk) {
-    chunks.push(chunk)
-  })
+    res.on('data', function (chunk) {
+        chunks.push(chunk)
+    })
 
-  res.on('end', function (chunk) {
-    var body = Buffer.concat(chunks)
-    console.log(body.toString())
-  })
+    res.on('end', function (chunk) {
+        var body = Buffer.concat(chunks)
+        console.log(body.toString())
+    })
 
-  res.on('error', function (error) {
-    console.error(error)
-  })
+    res.on('error', function (error) {
+        console.error(error)
+    })
 })
 
 req.end()

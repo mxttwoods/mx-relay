@@ -2,8 +2,7 @@ import configparser
 import logging.config
 import smtplib
 import ssl
-import os
-import sys
+
 import yaml
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -26,11 +25,15 @@ with open("log.yaml", "r") as conf:
     logging.config.dictConfig(logger_config)
 
 logger = logging.getLogger("main")
+logger.info("Config loaded")
 
-logger.info("PORT: %s", PORT)
-logger.info("USERNAME: %s", USERNAME)
-logger.info("PASSWORD: %s", PASSWORD)
-logger.info("SMTP: %s", SMTP)
+logger.debug("PORT: %s", PORT)
+logger.debug("USERNAME: %s", USERNAME)
+logger.debug("PASSWORD: %s", PASSWORD)
+logger.debug("SMTP: %s", SMTP)
+logger.debug("DB: %s", db)
+
+logger.info("Starting server")
 
 
 class Email(db.Model):
@@ -47,16 +50,20 @@ class Email(db.Model):
 
 
 db.create_all()
+logger.info("Database created")
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    logger.debug(request.text)
+    logger.info("Hello World!")
     return "Hello World!", 200
 
 
 @app.route("/api/v2/mail", methods=["POST"])
 def send_mail_v2():
     if request.method == "POST":
+        logger.debug(request.text)
         email = request.args.get("email", default=None, type=str)
         message = request.args.get("message", default=None, type=str)
         global USERNAME
@@ -67,8 +74,13 @@ def send_mail_v2():
 
         try:
             with smtplib.SMTP_SSL(SMTP, PORT, context=CONTEXT) as server:
+                logger.debug("Connecting to %s:%s", SMTP, PORT)
+                logger.debug("Logging in with %s:%s", USERNAME, PASSWORD)
                 server.login(USERNAME, PASSWORD)
+                logger.debug("Sending email to %s:%s", email, message)
                 server.sendmail(USERNAME, email, message)
+                logger.info("Email sent to %s", email)
+                logger.debug(message)
         except Exception as e:
             response = jsonify({"exception": e})
             logger.error(response)
@@ -85,6 +97,7 @@ def send_mail_v2():
 @app.route("/api/v1/mail/<email>/<message>", methods=["POST"])
 def send_mail(email, message):
     if request.method == "POST":
+        logger.debug(request.text)
         global USERNAME
         global PASSWORD
         global PORT
@@ -93,8 +106,13 @@ def send_mail(email, message):
 
         try:
             with smtplib.SMTP_SSL(SMTP, PORT, context=CONTEXT) as server:
+                logger.debug("Connecting to %s:%s", SMTP, PORT)
+                logger.debug("Logging in with %s:%s", USERNAME, PASSWORD)
                 server.login(USERNAME, PASSWORD)
+                logger.debug("Sending email to %s:%s", email, message)
                 server.sendmail(USERNAME, email, message)
+                logger.info("Email sent to %s", email)
+                logger.debug(message)
         except Exception as e:
             response = jsonify({"exception": e})
             logger.error(response)
