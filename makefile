@@ -1,5 +1,5 @@
 docker-build:
-	docker build  --label mxrelay --tag python-mx-relay:latest .
+	docker build --label mxrelay --tag python-mx-relay:latest .
 docker-run:
 	docker run -d --name mxrelay -p 5000:5000 -p 491:491 python-mx-relay
 docker-clean:
